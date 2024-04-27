@@ -17,12 +17,12 @@ def rank():
     return data['成绩'].tolist()
 
 def change_val(name, value):
-    global data
+    global data, file_name
     index = data[data['姓名'] == name].index
     if not index.empty:
         current_score = data.loc[index, '成绩'].values[0]
         data.loc[index, '成绩'] = current_score + value
-        data.to_excel("Test.xlsx", index=False)
+        data.to_excel(file_name, index=False)
     else:
         print(f"找不到姓名为 {name} 的学生。")
 
@@ -94,7 +94,8 @@ def add_button(value):
     global ui, data
     current_name = ui.nameList.currentText()
     change_val(current_name, value)
-    render_new(get_name(data), rank())
+    rank()
+    render_new(get_name(data), get_score(data))
     ui.table_label.setHtml(convert_data(data))
     ui.label_2.setHtml(read_html_content("combined_chart.html"))
 
@@ -112,7 +113,7 @@ def start_ui():
 
 
 if __name__ == "__main__":
-    file_name = "下午.xlsx"
+    file_name = "上午.xlsx"
     data = pd.read_excel(file_name)
     names = get_name(data)
     score = get_score(data)
